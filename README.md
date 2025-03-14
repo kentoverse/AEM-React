@@ -13,6 +13,8 @@ Use Case: Used to define a Sling Model, which adapts a resource or request to a 
 
 Example:
 
+```java
+
 import org.apache.sling.models.annotations.Model;
 import org.apache.sling.models.annotations.injectorspecific.ValueMapValue;
 import org.apache.sling.api.resource.Resource;
@@ -40,6 +42,8 @@ When to Use:
 	•	When working with HTL (Sling Models are used to pass data to HTL templates).
 
 ⸻
+
+```
 
 2. @ValueMapValue
 
