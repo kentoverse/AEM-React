@@ -47,7 +47,7 @@ Use Case: Injects values from the JCR into fields in the Sling Model. This annot
 
 Example:
 
-{
+```java
 
 
 import org.apache.sling.models.annotations.Model;
@@ -73,6 +73,8 @@ public class AuthorModel {
  
 }
 
+```
+
 When to Use:
 	•	When you need to inject properties of a resource directly into a field in your Sling Model.
 	•	When working with properties of content nodes (e.g., page properties, metadata).
@@ -84,6 +86,8 @@ When to Use:
 Use Case: Injects AEM-specific services into a Sling Model. This can be used to inject various services (like SlingHttpServletRequest, ResourceResolver, etc.) into a model for easy access.
 
 Example:
+
+```java
 
 import org.apache.sling.models.annotations.Model;
 import org.apache.sling.api.resource.ResourceResolver;
@@ -100,6 +104,8 @@ public class SiteModel {
     }
 }
 
+```
+
 When to Use:
 	•	When you need to inject AEM-specific services into your Sling Models, such as ResourceResolver, SlingHttpServletRequest, or SlingHttpServletResponse.
 
@@ -110,6 +116,9 @@ When to Use:
 Use Case: This annotation is used for injecting the current request or resource into a field of a Sling Model. It’s commonly used to inject the SlingHttpServletRequest or the current Resource into the model.
 
 Example:
+
+
+```java
 
 
 import org.apache.sling.models.annotations.Model;
@@ -126,6 +135,8 @@ public class RequestModel {
         return request.getRequestURI();
     }
 }
+
+```
 
 When to Use:
 	•	When you need to inject the current request (SlingHttpServletRequest) or resource (Resource) in a Sling Model to access request or resource-specific data.
@@ -168,6 +179,8 @@ Use Case: Used for binding a Sling Model to a specific component for the design 
 
 Example:
 
+```
+
 import org.apache.sling.models.annotations.Model;
 import org.apache.sling.models.annotations.DesignModel;
 import org.apache.sling.api.resource.Resource;
@@ -187,6 +200,9 @@ public class DesignDialogModel {
     }
 }
 
+
+```
+
 When to Use:
 	•	When working with design dialogs in AEM, typically used in editable templates.
 	•	When you need to create models that will provide the design-specific properties.
@@ -197,7 +213,11 @@ When to Use:
 
 Use Case: Used to inject Sling-specific objects like the SlingHttpServletRequest, SlingHttpServletResponse, or SlingContext into a Sling Model.
 
+
+
 Example:
+
+```java
 
 import org.apache.sling.models.annotations.Model;
 import org.apache.sling.api.servlets.SlingHttpServletRequest;
@@ -214,6 +234,8 @@ public class RequestInfoModel {
     }
 }
 
+```
+
 When to Use:
 	•	When you need to access low-level Sling-specific objects such as SlingHttpServletRequest or SlingContext in your model.
 
@@ -222,6 +244,9 @@ When to Use:
 8. @RequestAttribute
 
 Use Case: Used to inject request attributes into a Sling Model. It allows you to access values passed via request attributes.
+
+
+```java
 
 Example:
 
@@ -239,6 +264,9 @@ public class RequestAttributeModel {
     }
 }
 
+
+```
+
 When to Use:
 	•	When you need to inject request attributes (e.g., values passed in the request scope) into a Sling Model.
 
@@ -249,6 +277,8 @@ When to Use:
 Use Case: This annotation is used to inject values from a custom source, such as an external service, or a custom repository.
 
 Example:
+
+```java
 
 import org.apache.sling.models.annotations.Model;
 import org.apache.sling.models.annotations.injectorspecific.Source;
@@ -264,6 +294,9 @@ public class ExternalServiceModel {
     }
 }
 
+```
+
+
 When to Use:
 	•	When you need to inject values or services from an external source like an external service or custom repository into a Sling Model.
 
@@ -274,6 +307,9 @@ When to Use:
 Use Case: This annotation is used for exporting a Sling Model as a JSON object, which can be useful in headless CMS or API-based use cases.
 
 Example:
+
+
+```java
 
 import org.apache.sling.models.annotations.Model;
 import org.apache.sling.models.annotations.exporter.Exporters;
@@ -294,6 +330,9 @@ public class JsonExportModel {
         return description;
     }
 }
+
+
+```
 
 When to Use:
 	•	When building a headless AEM architecture where data is exposed as JSON through the Sling Model.
@@ -320,6 +359,9 @@ A Sling Model is typically used to retrieve and manipulate data from JCR and mak
 
 Code Snippet:
 
+```java
+
+
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.models.annotations.Model;
 import org.apache.sling.models.annotations.injectorspecific.ValueMapValue;
@@ -342,6 +384,8 @@ public class PageModel {
     }
 }
 
+```
+
 Explanation:
 
 In this example, PageModel is a Sling Model that adapts a Resource to Java and injects the title and description from the JCR repository. The values are accessed via ValueMapValue annotations.
@@ -358,6 +402,9 @@ HTL is commonly used for rendering data on the front end, with Java classes prov
 
 Code Snippet:
 
+```java
+
+
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.models.annotations.Model;
 import org.apache.sling.models.annotations.injectorspecific.ValueMapValue;
@@ -373,11 +420,19 @@ public class HeaderModel {
     }
 }
 
+```
+
+
 HTL Example:
+
+```html
 
 <div>
     <h1>${model.headerTitle}</h1>
 </div>
+
+
+```
 
 Explanation:
 
@@ -394,6 +449,7 @@ Use Case:
 Custom servlets in AEM are typically used for business logic that needs to interact with the request and response, such as form submissions or RESTful endpoints.
 
 Code Snippet:
+```java
 
 import org.apache.sling.api.servlets.SlingAllMethodsServlet;
 import org.apache.sling.api.servlets.Servlet;
@@ -417,6 +473,9 @@ public class CustomServlet extends SlingAllMethodsServlet {
     }
 }
 
+
+```
+
 Explanation:
 
 This servlet is registered to handle POST requests at the /bin/customservlet path. It retrieves a parameter from the request and writes a response.
@@ -432,6 +491,9 @@ Use Case:
 Event handlers are often used for custom workflows like updating search indexes, triggering notifications, or executing background tasks when content is added or modified.
 
 Code Snippet:
+
+```java
+
 
 import org.apache.sling.event.jobs.Job;
 import org.apache.sling.event.jobs.JobConsumer;
@@ -450,6 +512,8 @@ public class CustomJobConsumer implements JobConsumer {
     }
 }
 
+```
+
 Explanation:
 
 This code demonstrates how to create a custom JobConsumer that handles events. The processJob method is called when a job event occurs, and custom logic can be applied.
@@ -465,6 +529,9 @@ Use Case:
 Filters are useful for security, logging, and modifying requests or responses based on certain conditions.
 
 Code Snippet:
+
+```java
+
 
 import org.apache.sling.api.filter.Filter;
 import org.apache.sling.api.filter.FilterChain;
@@ -499,6 +566,9 @@ public class CustomFilter implements Filter {
     }
 }
 
+
+```
+
 Explanation:
 
 This filter applies custom logic before the request is passed to the servlet. It can be used for actions like logging, security checks, etc.
@@ -514,6 +584,7 @@ Use Case:
 Services are useful for shared logic, like sending emails, interacting with third-party services, or handling content delivery logic.
 
 Code Snippet:
+```
 
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
@@ -528,6 +599,8 @@ public class MyComponent {
         emailService.sendEmail(recipient, subject, message);
     }
 }
+
+```
 
 Explanation:
 
@@ -544,6 +617,8 @@ Use Case:
 This is useful for tasks like processing large data imports or background tasks that shouldn’t be handled in real-time.
 
 Code Snippet:
+
+```
 
 import org.apache.sling.event.jobs.JobManager;
 import org.apache.sling.event.jobs.Job;
@@ -563,6 +638,8 @@ public class JobService {
         });
     }
 }
+```
+
 
 Explanation:
 
@@ -679,12 +756,6 @@ Preparing for an Adobe Experience Manager (AEM) Architect Role requires a deep u
 
 ---
 
-This guide serves as a **quick reference** for AEM Architect interview preparation. 🚀
-
-
-
-
-
 ⸻
 
 # Java
@@ -769,6 +840,8 @@ Here are Java code snippets demonstrating key design patterns commonly used in A
 
 Used for maintaining a single instance of expensive objects like GraphQL clients.
 
+```
+
 public class GraphQLClient {
     private static GraphQLClient instance;
     
@@ -790,12 +863,16 @@ public class GraphQLClient {
 }
 
 
+```
+
 
 ⸻
 
 2. Factory Pattern (Creating API Clients & Data Models)
 
 Dynamically creates different API clients based on request parameters.
+
+```
 
 public interface APIClient {
     void fetchData();
@@ -824,6 +901,8 @@ public class APIClientFactory {
     }
 }
 
+```
+
 
 
 ⸻
@@ -831,6 +910,9 @@ public class APIClientFactory {
 3. Builder Pattern (Creating Complex Queries & DTOs)
 
 Builds dynamic and reusable GraphQL queries.
+
+
+```
 
 public class GraphQLQueryBuilder {
     private String query;
@@ -864,6 +946,7 @@ public class GraphQLQueryBuilder {
 }
 
 
+```
 
 ⸻
 
@@ -871,10 +954,19 @@ public class GraphQLQueryBuilder {
 
 Separates database logic from business logic.
 
+Interface
+
+```
+
 public interface ProductRepository {
     Product getProductById(int id);
     void saveProduct(Product product);
 }
+
+```
+Class
+
+```
 
 public class JCRProductRepository implements ProductRepository {
     public Product getProductById(int id) {
@@ -888,16 +980,29 @@ public class JCRProductRepository implements ProductRepository {
 }
 
 
-
+```
 ⸻
 
 5. Strategy Pattern (Payment & Authentication Mechanisms)
 
 Dynamically selects different payment or authentication strategies.
 
+Interface
+
+```
+
 public interface PaymentStrategy {
     void pay(double amount);
 }
+
+
+
+```
+Class
+
+```
+
+`
 
 public class PayPalPayment implements PaymentStrategy {
     public void pay(double amount) {
@@ -929,6 +1034,9 @@ public class PaymentContext {
 }
 
 
+```
+
+
 
 ⸻
 
@@ -936,12 +1044,20 @@ public class PaymentContext {
 
 Used for real-time notifications.
 
+Interface
+```
+
 import java.util.ArrayList;
 import java.util.List;
 
 interface Observer {
     void update(String message);
 }
+
+```
+
+Class
+```
 
 class Customer implements Observer {
     private String name;
@@ -969,6 +1085,12 @@ class OrderStatus {
     }
 }
 
+```
+
+
+Observer Class
+```
+
 public class ObserverPatternDemo {
     public static void main(String[] args) {
         OrderStatus order = new OrderStatus();
@@ -981,6 +1103,8 @@ public class ObserverPatternDemo {
         order.notifyObservers("Your order has been shipped!");
     }
 }
+
+```
 
 
 
