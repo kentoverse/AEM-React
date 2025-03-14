@@ -35,7 +35,9 @@ For AEM React GraphQL Integration in E-commerce and Banking web applications, Ja
 
 ⸻
 
-Java Fundamentals in AEM React GraphQL Integration
+# Java
+
+## Java Fundamentals in AEM React GraphQL Integration
 
 1. Core Java Principles
 	•	OOP (Object-Oriented Programming) → Encapsulation, Inheritance, Polymorphism, and Abstraction.
@@ -50,7 +52,7 @@ Java Fundamentals in AEM React GraphQL Integration
 
 ⸻
 
-Key Java Design Patterns Used
+## Key Java Design Patterns Used
 
 1. Singleton Pattern (For Global Configurations & Services)
 	•	Used in AEM OSGi services to maintain a single instance of frequently accessed objects (e.g., GraphQL Client, API Connectors).
@@ -86,7 +88,7 @@ Key Java Design Patterns Used
 
 ⸻
 
-Architecture for E-commerce & Banking Applications
+## Architecture for E-commerce & Banking Applications
 
 1. E-Commerce (AEM + React + GraphQL)
 	•	Frontend: React with Apollo Client for GraphQL queries.
@@ -100,6 +102,8 @@ Architecture for E-commerce & Banking Applications
 	•	Microservices: Spring Boot + Kafka for real-time transaction processing.
 	•	Data Management: PostgreSQL, MongoDB for handling financial data.
 	•	GraphQL Gateway: Unifying multiple backend services (accounts, loans, credit scores).
+
+
 
 
 
