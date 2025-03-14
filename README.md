@@ -47,6 +47,9 @@ Use Case: Injects values from the JCR into fields in the Sling Model. This annot
 
 Example:
 
+{
+
+
 import org.apache.sling.models.annotations.Model;
 import org.apache.sling.models.annotations.injectorspecific.ValueMapValue;
 
@@ -66,6 +69,8 @@ public class AuthorModel {
     public String getAuthorBio() {
         return authorBio != null ? authorBio : "No bio available";
     }
+ }
+ 
 }
 
 When to Use:
@@ -105,6 +110,7 @@ When to Use:
 Use Case: This annotation is used for injecting the current request or resource into a field of a Sling Model. It’s commonly used to inject the SlingHttpServletRequest or the current Resource into the model.
 
 Example:
+
 
 import org.apache.sling.models.annotations.Model;
 import org.apache.sling.api.servlets.SlingHttpServletRequest;
