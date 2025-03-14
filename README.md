@@ -698,6 +698,23 @@ This guide serves as a **quick reference** for AEM Architect interview preparati
 
 ⸻
 
+## Architecture for E-commerce & Banking Applications
+
+1. E-Commerce (AEM + React + GraphQL)
+	•	Frontend: React with Apollo Client for GraphQL queries.
+	•	Backend: AEM with GraphQL persisted queries for optimized content delivery.
+	•	Search: Elasticsearch/Solr for product catalog searches.
+	•	Payment & Order Processing: Spring Boot Microservices handling secure transactions.
+	•	Caching: Dispatcher & CDN (Akamai, Cloudflare) for performance optimization.
+
+2. Banking (AEM + React + GraphQL)
+	•	Security: OAuth 2.0, JWT Authentication.
+	•	Microservices: Spring Boot + Kafka for real-time transaction processing.
+	•	Data Management: PostgreSQL, MongoDB for handling financial data.
+	•	GraphQL Gateway: Unifying multiple backend services (accounts, loans, credit scores).
+
+
+
 ## Key Java Design Patterns Used
 
 1. Singleton Pattern (For Global Configurations & Services)
@@ -735,23 +752,311 @@ This guide serves as a **quick reference** for AEM Architect interview preparati
 ⸻
 React GraphQL Integration in E-commerce and Banking web applications, Java fundamentals and design patterns play a crucial role in building a scalable, maintainable, and secure architecture. Here’s a breakdown:
 
-## Architecture for E-commerce & Banking Applications
-
-1. E-Commerce (AEM + React + GraphQL)
-	•	Frontend: React with Apollo Client for GraphQL queries.
-	•	Backend: AEM with GraphQL persisted queries for optimized content delivery.
-	•	Search: Elasticsearch/Solr for product catalog searches.
-	•	Payment & Order Processing: Spring Boot Microservices handling secure transactions.
-	•	Caching: Dispatcher & CDN (Akamai, Cloudflare) for performance optimization.
-
-2. Banking (AEM + React + GraphQL)
-	•	Security: OAuth 2.0, JWT Authentication.
-	•	Microservices: Spring Boot + Kafka for real-time transaction processing.
-	•	Data Management: PostgreSQL, MongoDB for handling financial data.
-	•	GraphQL Gateway: Unifying multiple backend services (accounts, loans, credit scores).
 
 
 
+Here are Java code snippets demonstrating key design patterns commonly used in AEM, e-commerce, and banking applications:
+
+⸻
+
+1. Singleton Pattern (Global Configurations & Services)
+
+Used for maintaining a single instance of expensive objects like GraphQL clients.
+
+public class GraphQLClient {
+    private static GraphQLClient instance;
+    
+    private GraphQLClient() {
+        // Private constructor to prevent instantiation
+    }
+    
+    public static synchronized GraphQLClient getInstance() {
+        if (instance == null) {
+            instance = new GraphQLClient();
+        }
+        return instance;
+    }
+    
+    public String executeQuery(String query) {
+        // Logic to execute GraphQL query
+        return "Query Result";
+    }
+}
+
+
+
+⸻
+
+2. Factory Pattern (Creating API Clients & Data Models)
+
+Dynamically creates different API clients based on request parameters.
+
+public interface APIClient {
+    void fetchData();
+}
+
+public class GraphQLAPIClient implements APIClient {
+    public void fetchData() {
+        System.out.println("Fetching data from GraphQL API");
+    }
+}
+
+public class RestAPIClient implements APIClient {
+    public void fetchData() {
+        System.out.println("Fetching data from REST API");
+    }
+}
+
+public class APIClientFactory {
+    public static APIClient getClient(String type) {
+        if ("GraphQL".equalsIgnoreCase(type)) {
+            return new GraphQLAPIClient();
+        } else if ("REST".equalsIgnoreCase(type)) {
+            return new RestAPIClient();
+        }
+        throw new IllegalArgumentException("Invalid API Client Type");
+    }
+}
+
+
+
+⸻
+
+3. Builder Pattern (Creating Complex Queries & DTOs)
+
+Builds dynamic and reusable GraphQL queries.
+
+public class GraphQLQueryBuilder {
+    private String query;
+
+    public GraphQLQueryBuilder() {
+        this.query = "";
+    }
+
+    public GraphQLQueryBuilder select(String field) {
+        this.query += field + " ";
+        return this;
+    }
+
+    public GraphQLQueryBuilder from(String object) {
+        this.query = object + " { " + this.query + "}";
+        return this;
+    }
+
+    public String build() {
+        return "query { " + this.query + " }";
+    }
+
+    public static void main(String[] args) {
+        String query = new GraphQLQueryBuilder()
+                            .select("id")
+                            .select("name")
+                            .from("product")
+                            .build();
+        System.out.println(query);
+    }
+}
+
+
+
+⸻
+
+4. Repository Pattern (Data Access & Persistence)
+
+Separates database logic from business logic.
+
+public interface ProductRepository {
+    Product getProductById(int id);
+    void saveProduct(Product product);
+}
+
+public class JCRProductRepository implements ProductRepository {
+    public Product getProductById(int id) {
+        System.out.println("Fetching product from JCR with ID: " + id);
+        return new Product(id, "Sample Product");
+    }
+
+    public void saveProduct(Product product) {
+        System.out.println("Saving product in JCR: " + product.getName());
+    }
+}
+
+
+
+⸻
+
+5. Strategy Pattern (Payment & Authentication Mechanisms)
+
+Dynamically selects different payment or authentication strategies.
+
+public interface PaymentStrategy {
+    void pay(double amount);
+}
+
+public class PayPalPayment implements PaymentStrategy {
+    public void pay(double amount) {
+        System.out.println("Paid $" + amount + " using PayPal.");
+    }
+}
+
+public class CreditCardPayment implements PaymentStrategy {
+    public void pay(double amount) {
+        System.out.println("Paid $" + amount + " using Credit Card.");
+    }
+}
+
+public class PaymentContext {
+    private PaymentStrategy strategy;
+
+    public PaymentContext(PaymentStrategy strategy) {
+        this.strategy = strategy;
+    }
+
+    public void executePayment(double amount) {
+        strategy.pay(amount);
+    }
+
+    public static void main(String[] args) {
+        PaymentContext context = new PaymentContext(new PayPalPayment());
+        context.executePayment(100.0);
+    }
+}
+
+
+
+⸻
+
+6. Observer Pattern (Event-Driven Architecture)
+
+Used for real-time notifications.
+
+import java.util.ArrayList;
+import java.util.List;
+
+interface Observer {
+    void update(String message);
+}
+
+class Customer implements Observer {
+    private String name;
+
+    public Customer(String name) {
+        this.name = name;
+    }
+
+    public void update(String message) {
+        System.out.println(name + " received notification: " + message);
+    }
+}
+
+class OrderStatus {
+    private List<Observer> observers = new ArrayList<>();
+
+    public void addObserver(Observer observer) {
+        observers.add(observer);
+    }
+
+    public void notifyObservers(String status) {
+        for (Observer observer : observers) {
+            observer.update(status);
+        }
+    }
+}
+
+public class ObserverPatternDemo {
+    public static void main(String[] args) {
+        OrderStatus order = new OrderStatus();
+        Customer customer1 = new Customer("John");
+        Customer customer2 = new Customer("Jane");
+
+        order.addObserver(customer1);
+        order.addObserver(customer2);
+
+        order.notifyObservers("Your order has been shipped!");
+    }
+}
+
+
+
+⸻
+
+7. Adapter Pattern (External API Integrations)
+
+Converts GraphQL API responses to REST format.
+
+interface RestAPI {
+    String getData();
+}
+
+class GraphQLService {
+    public String executeQuery() {
+        return "{ \"data\": \"GraphQL Response\" }";
+    }
+}
+
+class GraphQLToRestAdapter implements RestAPI {
+    private GraphQLService graphQLService;
+
+    public GraphQLToRestAdapter(GraphQLService graphQLService) {
+        this.graphQLService = graphQLService;
+    }
+
+    public String getData() {
+        return "Converted to REST: " + graphQLService.executeQuery();
+    }
+}
+
+public class AdapterPatternDemo {
+    public static void main(String[] args) {
+        GraphQLService graphQLService = new GraphQLService();
+        RestAPI restAPI = new GraphQLToRestAdapter(graphQLService);
+        System.out.println(restAPI.getData());
+    }
+}
+
+
+
+⸻
+
+8. CQRS Pattern (Command Query Responsibility Segregation)
+
+Separates read and write operations.
+
+interface QueryService {
+    String getProductDetails(int id);
+}
+
+interface CommandService {
+    void updateProductStock(int id, int quantity);
+}
+
+class ProductQueryService implements QueryService {
+    public String getProductDetails(int id) {
+        return "Product details for ID: " + id;
+    }
+}
+
+class ProductCommandService implements CommandService {
+    public void updateProductStock(int id, int quantity) {
+        System.out.println("Updated stock for product ID: " + id + " with quantity: " + quantity);
+    }
+}
+
+public class CQRSExample {
+    public static void main(String[] args) {
+        QueryService queryService = new ProductQueryService();
+        CommandService commandService = new ProductCommandService();
+
+        System.out.println(queryService.getProductDetails(101));
+        commandService.updateProductStock(101, 50);
+    }
+}
+
+
+
+⸻
+
+These examples cover essential design patterns relevant to AEM development, e-commerce, and banking applications, providing modular, scalable, and maintainable architectures. 🚀 Let me know if you need any refinements!
 
 
 
