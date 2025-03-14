@@ -153,6 +153,7 @@ When to Use:
 Use Case: Marks a method that should be called after the model has been created and all fields have been injected. It’s used to perform initialization tasks that depend on the injected fields.
 
 Example:
+```
 
 import org.apache.sling.models.annotations.Model;
 import org.apache.sling.models.annotations.PostConstruct;
@@ -173,6 +174,8 @@ public class InitModel {
     }
 }
 
+```
+
 When to Use:
 	•	When you need to perform initialization tasks (e.g., setting default values, complex logic) after the model has been constructed and dependencies have been injected.
 
@@ -184,7 +187,7 @@ Use Case: Used for binding a Sling Model to a specific component for the design 
 
 Example:
 
-```
+```java
 
 import org.apache.sling.models.annotations.Model;
 import org.apache.sling.models.annotations.DesignModel;
@@ -1235,13 +1238,29 @@ A headless CRM (Customer Relationship Management) system separates the frontend 
 
 Yes, the code snippets are written in a format suitable for inclusion in a README.md file. However, to make them more readable and organized within a Markdown file, you can enhance the formatting by adding appropriate headers, explanations, and code block syntax. Here’s a revised version that you can directly use in your README.md:
 
-⸻
 
-React Functions
+
+
+### State Management Functions
+
+Function	Usage
+useState	Manages local component state. Ideal for UI-based state like form inputs.
+useReducer	Alternative to useState for complex state logic (e.g., state transitions).
+useContext	Shares state between components without prop drilling. Often used with React.createContext().
+useRef	Maintains references to DOM elements or persistent values without re-renders.
+useMemo	Optimizes performance by memoizing values based on dependencies.
+useCallback	Memoizes functions to prevent unnecessary re-renders in child components.
+useEffect	Performs side effects like fetching data or setting up event listeners.
+useLayoutEffect	Similar to useEffect but runs synchronously after DOM mutations.
+
+
+
 
 1. useState
 
 Manages local component state. Ideal for UI-based state like form inputs.
+
+```jsx
 
 import React, { useState } from 'react';
 
@@ -1256,9 +1275,16 @@ function Counter() {
   );
 }
 
+```
+
+
 2. useReducer
 
 An alternative to useState for managing complex state transitions (e.g., a counter with multiple actions).
+
+
+
+```jsx
 
 import React, { useReducer } from 'react';
 
@@ -1287,10 +1313,13 @@ function Counter() {
   );
 }
 
+```
+
 3. useContext
 
 Shares state globally across components without prop drilling. Often used with React.createContext().
 
+```
 import React, { createContext, useContext, useState } from 'react';
 
 const ThemeContext = createContext();
@@ -1325,6 +1354,9 @@ function App() {
   );
 }
 
+```
+```jsx
+
 4. useRef
 
 Maintains references to DOM elements or persistent values across renders.
@@ -1346,9 +1378,13 @@ function FocusInput() {
   );
 }
 
+```
+
 5. useMemo
 
 Optimizes performance by memoizing values based on dependencies.
+
+```
 
 import React, { useMemo, useState } from 'react';
 
@@ -1369,10 +1405,14 @@ function ExpensiveCalculation() {
   );
 }
 
+
+```
+
 6. useCallback
 
 Memoizes functions to prevent unnecessary re-renders in child components.
 
+```
 import React, { useCallback, useState } from 'react';
 
 function ExpensiveComponent({ onClick }) {
@@ -1396,9 +1436,14 @@ function Parent() {
   );
 }
 
+
+```
+
 7. useEffect
 
 Performs side effects like fetching data or setting up event listeners.
+
+```jsx
 
 import React, { useEffect, useState } from 'react';
 
@@ -1432,33 +1477,20 @@ function LayoutEffectComponent() {
   return <div ref={divRef}>Hello, world!</div>;
 }
 
+```
 
-
-⸻
-
-React State Management Functions
-
-State Management Functions
-
-Function	Usage
-useState	Manages local component state. Ideal for UI-based state like form inputs.
-useReducer	Alternative to useState for complex state logic (e.g., state transitions).
-useContext	Shares state between components without prop drilling. Often used with React.createContext().
-useRef	Maintains references to DOM elements or persistent values without re-renders.
-useMemo	Optimizes performance by memoizing values based on dependencies.
-useCallback	Memoizes functions to prevent unnecessary re-renders in child components.
-useEffect	Performs side effects like fetching data or setting up event listeners.
-useLayoutEffect	Similar to useEffect but runs synchronously after DOM mutations.
 
 
 
 ⸻
 
-Key React Patterns
+### Key React Patterns
 
 Higher-Order Components (HOC)
 
 A function that takes a component and returns an enhanced version of it.
+
+```
 
 function withAuth(Component) {
   return function AuthHOC(props) {
@@ -1467,9 +1499,15 @@ function withAuth(Component) {
   };
 }
 
+```
+
+
 Render Props
 
 A pattern where a function is passed as a prop to dynamically render content.
+
+
+```
 
 function MouseTracker({ render }) {
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
@@ -1491,10 +1529,13 @@ function App() {
   );
 }
 
+```
+
 Compound Components
 
 Groups related components together for better composition (e.g., <Accordion> with <AccordionItem>).
 
+```
 function Accordion({ children }) {
   const [openIndex, setOpenIndex] = useState(null);
 
@@ -1524,6 +1565,9 @@ function App() {
     </Accordion>
   );
 }
+
+
+```
 
 Controlled Components
 
