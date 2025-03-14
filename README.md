@@ -1,13 +1,308 @@
 
 # AEM 🚀
 
-## Developer 
-
-Sure! Here’s a list of AEM Java Core Components Patterns with function descriptions, code snippets, and use cases that you can use for your README.md file:
+## AEM Developer Cheat Sheet
 
 ⸻
 
-AEM Java Core Components Patterns
+### AEM Annotations
+
+1. @Model
+
+Use Case: Used to define a Sling Model, which adapts a resource or request to a Java object. It’s the primary annotation for working with Sling Models in AEM. You use this when you want to map a Java class to a resource or request to retrieve and manipulate data for use in the front-end (e.g., in HTL).
+
+Example:
+
+import org.apache.sling.models.annotations.Model;
+import org.apache.sling.models.annotations.injectorspecific.ValueMapValue;
+import org.apache.sling.api.resource.Resource;
+
+@Model(adaptables = Resource.class)
+public class PageModel {
+
+    @ValueMapValue
+    private String title;
+
+    @ValueMapValue
+    private String description;
+
+    public String getTitle() {
+        return title != null ? title : "Default Title";
+    }
+
+    public String getDescription() {
+        return description != null ? description : "Default Description";
+    }
+}
+
+When to Use:
+	•	When you need to adapt resources to a Java class.
+	•	When working with HTL (Sling Models are used to pass data to HTL templates).
+
+⸻
+
+2. @ValueMapValue
+
+Use Case: Injects values from the JCR into fields in the Sling Model. This annotation is used for fields that should get their values from a ValueMap of a resource, such as properties of a content node.
+
+Example:
+
+import org.apache.sling.models.annotations.Model;
+import org.apache.sling.models.annotations.injectorspecific.ValueMapValue;
+
+@Model(adaptables = Resource.class)
+public class AuthorModel {
+
+    @ValueMapValue
+    private String authorName;
+
+    @ValueMapValue
+    private String authorBio;
+
+    public String getAuthorName() {
+        return authorName != null ? authorName : "Unknown Author";
+    }
+
+    public String getAuthorBio() {
+        return authorBio != null ? authorBio : "No bio available";
+    }
+}
+
+When to Use:
+	•	When you need to inject properties of a resource directly into a field in your Sling Model.
+	•	When working with properties of content nodes (e.g., page properties, metadata).
+
+⸻
+
+3. @Inject
+
+Use Case: Injects AEM-specific services into a Sling Model. This can be used to inject various services (like SlingHttpServletRequest, ResourceResolver, etc.) into a model for easy access.
+
+Example:
+
+import org.apache.sling.models.annotations.Model;
+import org.apache.sling.api.resource.ResourceResolver;
+import org.apache.sling.models.annotations.Inject;
+
+@Model(adaptables = Resource.class)
+public class SiteModel {
+
+    @Inject
+    private ResourceResolver resourceResolver;
+
+    public String getSiteName() {
+        return resourceResolver.getContextPath();
+    }
+}
+
+When to Use:
+	•	When you need to inject AEM-specific services into your Sling Models, such as ResourceResolver, SlingHttpServletRequest, or SlingHttpServletResponse.
+
+⸻
+
+4. @Self
+
+Use Case: This annotation is used for injecting the current request or resource into a field of a Sling Model. It’s commonly used to inject the SlingHttpServletRequest or the current Resource into the model.
+
+Example:
+
+import org.apache.sling.models.annotations.Model;
+import org.apache.sling.api.servlets.SlingHttpServletRequest;
+import org.apache.sling.models.annotations.injectorspecific.Self;
+
+@Model(adaptables = SlingHttpServletRequest.class)
+public class RequestModel {
+
+    @Self
+    private SlingHttpServletRequest request;
+
+    public String getRequestPath() {
+        return request.getRequestURI();
+    }
+}
+
+When to Use:
+	•	When you need to inject the current request (SlingHttpServletRequest) or resource (Resource) in a Sling Model to access request or resource-specific data.
+
+⸻
+
+5. @PostConstruct
+
+Use Case: Marks a method that should be called after the model has been created and all fields have been injected. It’s used to perform initialization tasks that depend on the injected fields.
+
+Example:
+
+import org.apache.sling.models.annotations.Model;
+import org.apache.sling.models.annotations.PostConstruct;
+
+@Model(adaptables = Resource.class)
+public class InitModel {
+
+    private String initializedData;
+
+    @PostConstruct
+    public void init() {
+        // Perform initialization after all fields are injected
+        initializedData = "Initialization Complete";
+    }
+
+    public String getInitializedData() {
+        return initializedData;
+    }
+}
+
+When to Use:
+	•	When you need to perform initialization tasks (e.g., setting default values, complex logic) after the model has been constructed and dependencies have been injected.
+
+⸻
+
+6. @DesignModel
+
+Use Case: Used for binding a Sling Model to a specific component for the design dialog. It provides a model that is specifically tailored to handle the design dialog configurations in AEM.
+
+Example:
+
+import org.apache.sling.models.annotations.Model;
+import org.apache.sling.models.annotations.DesignModel;
+import org.apache.sling.api.resource.Resource;
+
+@Model(adaptables = Resource.class)
+@DesignModel
+public class DesignDialogModel {
+
+    private String componentTitle;
+
+    public String getComponentTitle() {
+        return componentTitle;
+    }
+
+    public void setComponentTitle(String title) {
+        this.componentTitle = title;
+    }
+}
+
+When to Use:
+	•	When working with design dialogs in AEM, typically used in editable templates.
+	•	When you need to create models that will provide the design-specific properties.
+
+⸻
+
+7. @SlingObject
+
+Use Case: Used to inject Sling-specific objects like the SlingHttpServletRequest, SlingHttpServletResponse, or SlingContext into a Sling Model.
+
+Example:
+
+import org.apache.sling.models.annotations.Model;
+import org.apache.sling.api.servlets.SlingHttpServletRequest;
+import org.apache.sling.models.annotations.injectorspecific.SlingObject;
+
+@Model(adaptables = SlingHttpServletRequest.class)
+public class RequestInfoModel {
+
+    @SlingObject
+    private SlingHttpServletRequest request;
+
+    public String getRequestURI() {
+        return request.getRequestURI();
+    }
+}
+
+When to Use:
+	•	When you need to access low-level Sling-specific objects such as SlingHttpServletRequest or SlingContext in your model.
+
+⸻
+
+8. @RequestAttribute
+
+Use Case: Used to inject request attributes into a Sling Model. It allows you to access values passed via request attributes.
+
+Example:
+
+import org.apache.sling.models.annotations.Model;
+import org.apache.sling.models.annotations.injectorspecific.RequestAttribute;
+
+@Model(adaptables = SlingHttpServletRequest.class)
+public class RequestAttributeModel {
+
+    @RequestAttribute(name = "userEmail")
+    private String userEmail;
+
+    public String getUserEmail() {
+        return userEmail != null ? userEmail : "No Email Provided";
+    }
+}
+
+When to Use:
+	•	When you need to inject request attributes (e.g., values passed in the request scope) into a Sling Model.
+
+⸻
+
+9. @Source
+
+Use Case: This annotation is used to inject values from a custom source, such as an external service, or a custom repository.
+
+Example:
+
+import org.apache.sling.models.annotations.Model;
+import org.apache.sling.models.annotations.injectorspecific.Source;
+
+@Model(adaptables = Resource.class)
+public class ExternalServiceModel {
+
+    @Source("externalService")
+    private ExternalService externalService;
+
+    public String fetchExternalData() {
+        return externalService.getData();
+    }
+}
+
+When to Use:
+	•	When you need to inject values or services from an external source like an external service or custom repository into a Sling Model.
+
+⸻
+
+10. @Exporter
+
+Use Case: This annotation is used for exporting a Sling Model as a JSON object, which can be useful in headless CMS or API-based use cases.
+
+Example:
+
+import org.apache.sling.models.annotations.Model;
+import org.apache.sling.models.annotations.exporter.Exporters;
+import org.apache.sling.models.annotations.exporter.JsonExporter;
+
+@Model(adaptables = Resource.class)
+@Exporters({ @Exporter(name = "jackson", extensions = "json") })
+public class JsonExportModel {
+
+    private String title;
+    private String description;
+
+    public String getTitle() {
+        return title;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+}
+
+When to Use:
+	•	When building a headless AEM architecture where data is exposed as JSON through the Sling Model.
+
+⸻
+
+Conclusion
+
+AEM provides a wide variety of annotations for simplifying and enhancing development, especially when dealing with Sling Models and components. These annotations can be used to inject dependencies, adapt resources, handle events, and simplify interactions with AEM’s rich set of services. Using them effectively can significantly reduce boilerplate code and improve maintainability in your AEM projects.
+
+
+
+⸻
+
+### AEM Java Core Components Patterns
 
 1. Use of Sling Models
 
