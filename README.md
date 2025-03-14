@@ -37,13 +37,14 @@ public class PageModel {
     }
 }
 
+```
+
 When to Use:
 	•	When you need to adapt resources to a Java class.
 	•	When working with HTL (Sling Models are used to pass data to HTL templates).
 
 ⸻
 
-```
 
 2. @ValueMapValue
 
