@@ -347,6 +347,68 @@ When to Use:
 
 ⸻
 
+Here’s an example of using the @ExportAs annotation in an AEM model to make its data available in JavaScript. This example shows how you can export data from a Sling Model and access it in the frontend.
+
+Step 1: Java Model with @ExportAs Annotation
+```
+
+import org.apache.sling.models.annotations.Model;
+import org.apache.sling.models.annotations.Exporter;
+import org.apache.sling.models.annotations.ExportAs;
+
+@Model(adaptables = Resource.class)
+@Exporter(name = "jackson", extensions = "json")
+@ExportAs("exampleModel")
+public class ExportAsExample {
+
+    private String exampleProperty = "Hello from the model";
+
+    public String getExampleProperty() {
+        return exampleProperty;
+    }
+}
+
+```
+
+Explanation
+	1.	@ExportAs(“exampleModel”): This annotation makes the model available as exampleModel in JavaScript.
+	2.	@Exporter(name = “jackson”, extensions = “json”): This annotation specifies that the model data should be exported in JSON format using the Jackson library. When accessed, the model will provide JSON data that can be used by JavaScript.
+
+Step 2: HTL Template to Render Model Data as JSON
+
+In order to make the data available to JavaScript on the frontend, you can create an HTL template that renders the model’s data as JSON.
+```
+<!-- HTL File (example.html) -->
+<div data-sly-use.model="com.example.core.models.ExportAsExample">
+    <script type="application/json" id="exampleModelData">
+        ${model @ json}
+    </script>
+</div>
+```
+
+Explanation
+	•	data-sly-use.model: Loads the ExportAsExample model as model in HTL.
+	•	${model @ json}: This outputs the entire model as JSON within a <script> tag with the type application/json. The @ json option converts the model to JSON format directly in the HTML.
+
+Step 3: JavaScript to Access Model Data
+
+In JavaScript, you can now access the JSON data by selecting the <script> tag and parsing its contents.
+
+// JavaScript to access the JSON data from the model
+const exampleModelDataScript = document.getElementById("exampleModelData");
+const exampleModelData = JSON.parse(exampleModelDataScript.textContent);
+
+console.log(exampleModelData.exampleProperty); // Output: "Hello from the model"
+
+Explanation
+	1.	document.getElementById(“exampleModelData”): Selects the <script> tag with the JSON data.
+	2.	JSON.parse(exampleModelDataScript.textContent): Parses the JSON content, allowing the JavaScript code to access exampleModelData as an object.
+
+Now, the model’s data is accessible to JavaScript on the page, enabling you to use it in your frontend code.
+
+
+
+
 Conclusion
 
 AEM provides a wide variety of annotations for simplifying and enhancing development, especially when dealing with Sling Models and components. These annotations can be used to inject dependencies, adapt resources, handle events, and simplify interactions with AEM’s rich set of services. Using them effectively can significantly reduce boilerplate code and improve maintainability in your AEM projects.
