@@ -717,11 +717,270 @@ In this example, a new job is created and an event listener is added. The job wi
 
 ⸻
 
+
+
+8 Java Model Class with SlingScriptHelper
+
+```
+import org.apache.sling.api.scripting.SlingScriptHelper;
+import org.apache.sling.models.annotations.Model;
+import org.apache.sling.models.annotations.ScriptVariable;
+
+@Model(adaptables = Resource.class)
+public class ScriptHelperExample {
+
+    @ScriptVariable
+    private SlingScriptHelper scriptHelper;
+
+    public String getServiceName() {
+        // Assuming there's a service registered that we want to access
+        MyCustomService customService = scriptHelper.getService(MyCustomService.class);
+        if (customService != null) {
+            return customService.getServiceName();
+        } else {
+            return "Service not available";
+        }
+    }
+}
+```
+
+In this example, SlingScriptHelper is used to retrieve an instance of MyCustomService. The method getServiceName() returns the name of the service, or a fallback message if the service isn’t available.
+
+Corresponding HTL Code
+
+```
+
+<!-- HTL File (example.html) -->
+<div data-sly-use.model="com.example.core.models.ScriptHelperExample">
+    <p>Service Name: ${model.serviceName}</p>
+</div>
+```
+
+Explanation
+	1.	Data-Sly-Use: The data-sly-use.model attribute in HTL binds the ScriptHelperExample Java model to the model variable in HTL.
+	2.	${model.serviceName}: This expression calls the getServiceName() method from the Java model, which either fetches the name of the service or returns “Service not available” if the service isn’t accessible.
+
+Use of SlingScriptHelper in This Context
+
+The SlingScriptHelper allows you to obtain AEM services directly within a model, making it possible to call these services in HTL through the model methods, enhancing functionality cleanly and efficiently.
+
+
+Here’s an example of how to use SlingScriptHelper with HTL in Adobe Experience Manager (AEM).
+
+Java Model Class with SlingScriptHelper
+
+import org.apache.sling.api.scripting.SlingScriptHelper;
+import org.apache.sling.models.annotations.Model;
+import org.apache.sling.models.annotations.ScriptVariable;
+
+@Model(adaptables = Resource.class)
+public class ScriptHelperExample {
+
+    @ScriptVariable
+    private SlingScriptHelper scriptHelper;
+
+    public String getServiceName() {
+        // Assuming there's a service registered that we want to access
+        MyCustomService customService = scriptHelper.getService(MyCustomService.class);
+        if (customService != null) {
+            return customService.getServiceName();
+        } else {
+            return "Service not available";
+        }
+    }
+}
+
+In this example, SlingScriptHelper is used to retrieve an instance of MyCustomService. The method getServiceName() returns the name of the service, or a fallback message if the service isn’t available.
+
+Corresponding HTL Code
+
+<!-- HTL File (example.html) -->
+<div data-sly-use.model="com.example.core.models.ScriptHelperExample">
+    <p>Service Name: ${model.serviceName}</p>
+</div>
+
+Explanation
+	1.	Data-Sly-Use: The data-sly-use.model attribute in HTL binds the ScriptHelperExample Java model to the model variable in HTL.
+	2.	${model.serviceName}: This expression calls the getServiceName() method from the Java model, which either fetches the name of the service or returns “Service not available” if the service isn’t accessible.
+
+Use of SlingScriptHelper in This Context
+
+The SlingScriptHelper allows you to obtain AEM services directly within a model, making it possible to call these services in HTL through the model methods, enhancing functionality in a clean and efficient way.
+
+
+
+### Annotation
+
+1. @Model Example
+
+import org.apache.sling.models.annotations.Model;
+
+@Model(adaptables = Resource.class)
+public class ExampleModel {
+    // This class can now serve as a model to hold and manage data for a component.
+}
+
+2. @Inject Example
+
+import org.apache.sling.models.annotations.Model;
+import org.apache.sling.models.annotations.Inject;
+
+@Model(adaptables = Resource.class)
+public class InjectExample {
+
+    @Inject
+    private String title;
+
+    // AEM will automatically inject the "title" property from the JCR (database) into this field.
+}
+
+3. @ValueMapValue Example
+
+import org.apache.sling.models.annotations.Model;
+import org.apache.sling.api.resource.ValueMap;
+import org.apache.sling.models.annotations.ValueMapValue;
+
+@Model(adaptables = Resource.class)
+public class ValueMapExample {
+
+    @ValueMapValue
+    private String description;
+
+    // The "description" property is fetched directly from the JCR.
+}
+
+4. @SlingObject Example
+
+import org.apache.sling.models.annotations.Model;
+import org.apache.sling.models.annotations.SlingObject;
+import org.apache.sling.api.resource.ResourceResolver;
+
+@Model(adaptables = Resource.class)
+public class SlingObjectExample {
+
+    @SlingObject
+    private ResourceResolver resourceResolver;
+
+    // This gives direct access to the ResourceResolver, useful for accessing AEM resources.
+}
+
+5. @Self Example
+
+import org.apache.sling.models.annotations.Model;
+import org.apache.sling.models.annotations.Self;
+import org.apache.sling.api.resource.Resource;
+
+@Model(adaptables = Resource.class)
+public class SelfExample {
+
+    @Self
+    private Resource currentResource;
+
+    // This provides access to the current resource this model is representing.
+}
+
+6. @Default Example
+
+import org.apache.sling.models.annotations.Model;
+import org.apache.sling.models.annotations.Default;
+import org.apache.sling.models.annotations.ValueMapValue;
+
+@Model(adaptables = Resource.class)
+public class DefaultExample {
+
+    @ValueMapValue
+    @Default(values = "Default Title")
+    private String title;
+
+    // If "title" is not set in the JCR, it will default to "Default Title."
+}
+
+7. @ScriptVariable Example
+
+import org.apache.sling.models.annotations.Model;
+import org.apache.sling.models.annotations.ScriptVariable;
+import org.apache.sling.api.scripting.SlingScriptHelper;
+
+@Model(adaptables = Resource.class)
+public class ScriptVariableExample {
+
+    @ScriptVariable
+    private SlingScriptHelper scriptHelper;
+
+    // The SlingScriptHelper is available here, usually set in HTL.
+}
+
+8. @Optional Example
+
+import org.apache.sling.models.annotations.Model;
+import org.apache.sling.models.annotations.Optional;
+import org.apache.sling.models.annotations.ValueMapValue;
+
+@Model(adaptables = Resource.class)
+public class OptionalExample {
+
+    @ValueMapValue
+    @Optional
+    private String optionalProperty;
+
+    // "optionalProperty" can be null without causing issues.
+}
+
+9. @PostConstruct Example
+
+import org.apache.sling.models.annotations.Model;
+import javax.annotation.PostConstruct;
+
+@Model(adaptables = Resource.class)
+public class PostConstructExample {
+
+    private String calculatedValue;
+
+    @PostConstruct
+    protected void init() {
+        // This code runs right after the model is created.
+        calculatedValue = "Value after setup";
+    }
+}
+
+10. @ExportAs Example
+
+import org.apache.sling.models.annotations.Model;
+import org.apache.sling.models.annotations.Exporter;
+import org.apache.sling.models.annotations.ExportAs;
+
+@Model(adaptables = Resource.class)
+@Exporter(name = "jackson", extensions = "json")
+@ExportAs("exampleModel")
+public class ExportAsExample {
+
+    private String exportedData = "Exported data";
+
+    public String getExportedData() {
+        return exportedData;
+    }
+    // This model can now be accessed as "exampleModel" in frontend JavaScript.
+}
+
+These examples cover each annotation, showing how they integrate with AEM’s functionality to make data accessible, customizable, and organized in your code.
+
+
+
+
+
+
+
+
+
+
 Conclusion
 
 These patterns and practices in AEM Java development allow for the creation of modular, reusable, and scalable solutions within AEM. Leveraging Sling Models, servlets, event handling, filters, OSGi services, and job management leads to a robust and maintainable AEM platform.
 
 ⸻
+
+
+
 
 
 
